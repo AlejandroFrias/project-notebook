@@ -94,15 +94,23 @@ One biggish implementation issue is that the order that Translator Objects are d
 **What questions do you have for your critique partners? How can they best help
 you?**
 
-An issue I have with my DSL right now is the readablilty of the `.misk` file syntax and the subsequently created `output.py` file. If I feel adventurous, I might create a syntax coloring Sublime Text 3 file to make it easier to parse. I think adding comments to the `.misk` that can transfer over to the plugin that is created might also make this nicer. If you have any syntax ideas to make it easier to understand (and still somehow parsable) I'm all ears. I think the web service front end would remove all these problems.
+~~An issue I have with my DSL right now is the readablilty of the `.misk` file syntax and the subsequently created `output.py` file. If I feel adventurous, I might create a syntax coloring Sublime Text 3 file to make it easier to parse. I think adding comments to the `.misk` that can transfer over to the plugin that is created might also make this nicer. If you have any syntax ideas to make it easier to understand (and still somehow parsable) I'm all ears. I think the web service front end would remove all these problems.~~
 
-I'm think of allowing for multiple Parser Objects per Translator object, to make it easier to have many ways of saying the same thing. Implemenation-wise, I would have done it already if I didn't have other work to do this weekend. But then I though about it. Does it make sense as a feature?
+Scratch that, I added syntax highlighting. Turned out to be easier than expected. Just save the MindSketch.tmLanguage file to `Packages / User` where you save your plugins and save it.
+
+~~I'm thinking of allowing for multiple Parser Objects per Translator object, to make it easier to have many ways of saying the same thing. Implemenation-wise, I would have done it already if I didn't have other work to do this weekend. But then I though about it. Does it make sense as a feature?~~
+
+Also scratch that. I allow for the declaration of multiple Parser Objects now, or none. You can split up the declaration of Parser Objects and Code Snippets for a particular Trnaslator object as you see fit. I'm getting it ready to allow imports.
+
+I still could use some feed back on error messages. I'm pretty sure those can still suck. At least there are some nice warnings if you forget to declare a Parser Object before your first Code Snippet and an error for when you don't use the same variables between parser objects.
+
+I guess overall comments. I've added a lot. So if there is any process that could use simplification in your eyes, that feedback is welcome. I want it to be usable by programmers for creating a plugins that make coding more accessible for non-programmers. A sort of collaboritive project. If you can't use the language, I need to know why and how to make it easier.
 
 **How much time did you spend on the project this week? If you're working in a
 team, how did you share the labor?**
 
 Oh god, I lost track. As I mentioned before, I got a little carried away. Too much fun!
-If I had to guess, I'd say 20ish?
+If I had to guess, I'd say ~~20ish~~ 25ish?
 
 ## Post-critique summary
 
@@ -139,8 +147,8 @@ class CodeSnippet(str):
 
 class TranslatorObject(List):
 	grammar = name(), ":", endl, \
-			  attr("parser", ParserDefine), endl, \
-			  some(CodeSnippet)
+			  attr("parsers", maybe_some(ParserDefine)), endl, \
+			  attr("code_snippets", maybe_some(CodeSnippet))
 
 class MindSketch(List):
 	grammar = some(TranslatorObject)
